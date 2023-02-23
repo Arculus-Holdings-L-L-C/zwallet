@@ -9,14 +9,14 @@ weight: 50
 
 The Receive/Payment URI page is for making QR codes that encode
 
-1. your receiving address (shielded or transparent)
-2. an amount requested in coins
-3. or in fiat currency
-4. and a memo text
-5. Once you fill these fields, tap the "Make QR" button to update the QR code.
-
-If you don't tap the button, the QR code is just your receiving address. You
-can also tap the QR code to refresh it.
+1. the payment URI QR (or address if amount is zero)
+2. the payment URI
+3. If the coin supports UA, list of receivers included in the address
+4. Copy URI to clipboard
+5. an amount requested in coins
+6. or in fiat currency
+7. and a memo text
+8. Reset values to default
 
 ## Quick Actions
 
