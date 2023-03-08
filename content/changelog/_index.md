@@ -4,9 +4,22 @@ weight: 80
 icon: wrench
 ---
 
+# 1.3.5
+
+- [Database Encryption]({{< relref "db_encrypt" >}})
+- Forgotten Password/Reset App
+
+# 1.3.4
+
+- BIP 39 + 1 extra word
+- Merge flatpak/appimage builders
+- Add Contact buttons
+- Diversifier Addresses by time
+- Bug fixes
+
 # 1.3.3
 
-- [Sweep external transparent address]({{< relref "custom_path#sweep-funds">}})
+- [Sweep external transparent address]({{< relref "custom_path#sweep-funds" >}})
 - Desktop versions save/restore the app window size
 - Fix crash when sending to t3 addresses
 - Hide titlebar on MacOS
