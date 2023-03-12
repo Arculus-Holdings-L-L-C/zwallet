@@ -274,3 +274,7 @@ is revealed
 go through the pools are revealed
 - Low: Destination is transparent
 - Very Low: Source and Destination are transparent
+
+## Pool Transfer
+
+[See Pools]({{< relref "pool" >}})
