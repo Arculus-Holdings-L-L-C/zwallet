@@ -4,6 +4,28 @@ weight: 80
 icon: wrench
 ---
 
+# 1.3.6
+
+- Auto hide balance setting
+- Customizable block explorer
+- Improved snackbar
+- Don't use memo as subject anymore
+- Tweak main account display
+- Optimize sync history
+- Show FX rate when balance is hidden
+- Save server and block explorer selection to DB
+- JSON -> flatbuffers
+- Rebase librustzcash
+- Archlinux pkgbuild
+- Flutter 3.7.7
+- Fix Crash on UA/O, zview
+- Fix reinit when no network
+- Fix contact resolver against UA
+- Fix display of tx item
+- Fix missing address when empty memo
+- Fix scan taddrs
+- Fix switch account not updating price chart
+
 # 1.3.5
 
 - [Database Encryption]({{< relref "db_encrypt" >}})
