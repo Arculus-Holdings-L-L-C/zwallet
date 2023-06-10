@@ -139,20 +139,22 @@ class AccountManagerState extends State<AccountManagerPage> {
             label: 'Save Batch',
             onTap: _onFullBackup,
           ),
-          SpeedDialChild(
-            child: Icon(Icons.subdirectory_arrow_right),
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.white,
-            label: 'New Sub-account',
-            onTap: _onNewSubaccount,
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.scanner),
-            backgroundColor: Colors.yellow,
-            foregroundColor: Colors.white,
-            label: 'Scan Accounts',
-            onTap: _onScanSubAccounts,
-          ),
+          if (active.isPrivate)
+            SpeedDialChild(
+              child: Icon(Icons.subdirectory_arrow_right),
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+              label: 'New Sub-account',
+              onTap: _onNewSubaccount,
+            ),
+          if (active.isPrivate)
+            SpeedDialChild(
+              child: Icon(Icons.scanner),
+              backgroundColor: Colors.yellow,
+              foregroundColor: Colors.white,
+              label: 'Scan Accounts',
+              onTap: _onScanSubAccounts,
+            ),
         ]));
   }
 

@@ -215,9 +215,10 @@ class QRAddressState extends State<QRAddressWidget> {
                   child: Icon(Icons.content_copy), onTap: _onAddressCopy)),
           WidgetSpan(
               child: Padding(padding: EdgeInsets.symmetric(horizontal: 4))),
-          WidgetSpan(
-              child: GestureDetector(
-                  child: Icon(MdiIcons.qrcodeScan), onTap: _onReceive)),
+          if (active.isPrivate)
+            WidgetSpan(
+                child: GestureDetector(
+                    child: Icon(MdiIcons.qrcodeScan), onTap: _onReceive)),
         ])),
         Padding(padding: EdgeInsets.symmetric(vertical: 4)),
         if (!simpleMode && addrMode != 2)
