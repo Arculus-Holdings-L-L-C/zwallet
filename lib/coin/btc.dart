@@ -17,7 +17,7 @@ class BTCCoin extends CoinBase {
   ];
   bool supportsUA = false;
   bool supportsMultisig = false;
-  List<double> weights = [0.001, 0.01, 0.1];
+  List<double> weights = [0.0001, 0.001, 0.01];
   List<String> blockExplorers = ["https://blockstream.info/testnet/tx"];
   bool supportsLedger = false;
 }
