@@ -165,6 +165,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "close": MessageLookupByLibrary.simpleMessage("Close"),
         "closeApplication":
             MessageLookupByLibrary.simpleMessage("Close Application"),
+        "clr": MessageLookupByLibrary.simpleMessage("0"),
         "coffee": MessageLookupByLibrary.simpleMessage("Coffee"),
         "coldStorage": MessageLookupByLibrary.simpleMessage("Cold Storage"),
         "color": MessageLookupByLibrary.simpleMessage("Color"),

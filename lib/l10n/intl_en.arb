@@ -77,6 +77,7 @@
   "key": "Seed, Secret Key or View Key (optional)",
   "sendCointicker": "Send {ticker}",
   "max": "MAX",
+  "clr": "0",
   "advancedOptions": "Advanced Options",
   "memo": "Memo",
   "roundToMillis": "Round to millis",

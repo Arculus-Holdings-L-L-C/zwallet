@@ -120,19 +120,20 @@ class HomeInnerState extends State<HomeInnerPage>
   void initState() {
     super.initState();
     if (Platform.isAndroid) _initForegroundTask();
+    final utxo = active.coinDef.utxo;
     var tabs = {
       // order is guaranteed by dart
       "account": true,
       "messages": true,
       "notes": false,
-      "history": true,
+      "history": active.coinDef.utxo,
       "budget": false,
       "pnl": false,
       "contacts": true,
     };
     if (!settings.simpleMode) {
-      tabs["notes"] = true;
-      tabs["budget"] = true;
+      tabs["notes"] = utxo;
+      tabs["budget"] = utxo;
       tabs["pnl"] = true;
     }
     if (!active.isPrivate) {
@@ -155,6 +156,7 @@ class HomeInnerState extends State<HomeInnerPage>
     final s = S.of(context);
     final theme = Theme.of(context);
     final simpleMode = settings.simpleMode;
+    final utxo = active.coinDef.utxo;
 
     final contactTabIndex = tabsShown.indexOf("contacts");
     final messageTabIndex = tabsShown.indexOf("messages");
@@ -240,8 +242,9 @@ class HomeInnerState extends State<HomeInnerPage>
                                 value: "Sign"),
                             PopupMenuItem(
                                 child: Text(s.broadcast), value: "Broadcast"),
-                            PopupMenuItem(
-                                child: Text(s.multipay), value: "MultiPay"),
+                            if (utxo)
+                              PopupMenuItem(
+                                  child: Text(s.multipay), value: "MultiPay"),
                             if (privateCoin)
                               PopupMenuItem(
                                   child: Text(s.keyTool),

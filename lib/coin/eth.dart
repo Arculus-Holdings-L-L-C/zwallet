@@ -17,6 +17,7 @@ class EthCoin extends CoinBase {
   ];
   bool supportsUA = false;
   bool supportsMultisig = false;
+  bool utxo = false;
   List<double> weights = [0.001, 0.01, 0.1];
   List<String> blockExplorers = ["https://etherscan.io/tx"];
   bool supportsLedger = false;

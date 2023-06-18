@@ -29,7 +29,6 @@ class DualMoneyInputWidget extends StatefulWidget {
 }
 
 class DualMoneyInputState extends State<DualMoneyInputWidget> {
-  var zero = "";
   var inputInCoin = true;
   var coinAmountController = TextEditingController();
   var fiatAmountController = TextEditingController();
@@ -39,6 +38,7 @@ class DualMoneyInputState extends State<DualMoneyInputWidget> {
   double sliderValue = 0;
   var _feeIncluded = false;
   bool _useMillis = settings.useMillis;
+  String zero = amountToString(0, precision(settings.useMillis));
 
   ReactionDisposer? priceAutorunDispose;
 
@@ -50,9 +50,11 @@ class DualMoneyInputState extends State<DualMoneyInputWidget> {
   void initState() {
     super.initState();
     _fiat = widget.fiat;
-    zero = amountToString(0, precision(_useMillis));
-    final initialValue = widget.initialValue ?? 0;
-    final amount = amountToString(initialValue, precision(_useMillis));
+    final initialValue = widget.initialValue;
+    final amount = initialValue != null
+        ? amountToString(initialValue, MAX_PRECISION)
+        : zero;
+    if (initialValue != null) _useMillis = false;
     coinAmountController.text = amount;
     _updateFxRate();
     _updateSlider();
@@ -108,22 +110,24 @@ class DualMoneyInputState extends State<DualMoneyInputWidget> {
       Row(children: [
         Expanded(
             child: TextFormField(
-                style: inputInCoin
-                    ? TextStyle(fontWeight: FontWeight.w200)
-                    : TextStyle(),
-                decoration: InputDecoration(
-                    labelText: s.amountInSettingscurrency(_fiat)),
-                controller: fiatAmountController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [makeInputFormatter(_useMillis)],
-                validator: (v) => _checkAmount(v, isFiat: true),
-                onTap: () => setState(() {
-                      inputInCoin = false;
-                    }),
-                onChanged: (_) {
-                  _updateAmount();
-                  _updateSlider();
-                }))
+          style: inputInCoin
+              ? TextStyle(fontWeight: FontWeight.w200)
+              : TextStyle(),
+          decoration:
+              InputDecoration(labelText: s.amountInSettingscurrency(_fiat)),
+          controller: fiatAmountController,
+          keyboardType: TextInputType.number,
+          inputFormatters: [makeInputFormatter(_useMillis)],
+          validator: (v) => _checkAmount(v, isFiat: true),
+          onTap: () => setState(() {
+            inputInCoin = false;
+          }),
+          onChanged: (_) {
+            _updateAmount();
+            _updateSlider();
+          },
+        )),
+        TextButton(child: Text(s.clr), onPressed: _onResetAmount),
       ]),
       if (widget.spendable != null)
         Slider(
@@ -148,9 +152,13 @@ class DualMoneyInputState extends State<DualMoneyInputWidget> {
   }
 
   void clear() {
+    _fiat = settings.currency;
+    _feeIncluded = false;
+    _onResetAmount();
+  }
+
+  void _onResetAmount() {
     setState(() {
-      _fiat = settings.currency;
-      _feeIncluded = false;
       coinAmountController.text = zero;
       fiatAmountController.text = zero;
       sliderValue = 0;

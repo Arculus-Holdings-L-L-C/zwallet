@@ -28,6 +28,7 @@ abstract class CoinBase {
   bool get supportsUA;
   bool get supportsMultisig;
   bool get supportsLedger;
+  bool get utxo;
   List<double> get weights;
   List<String> get blockExplorers;
 

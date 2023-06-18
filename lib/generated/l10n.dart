@@ -831,6 +831,16 @@ class S {
     );
   }
 
+  /// `0`
+  String get clr {
+    return Intl.message(
+      '0',
+      name: 'clr',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Advanced Options`
   String get advancedOptions {
     return Intl.message(
