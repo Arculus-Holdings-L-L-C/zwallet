@@ -5764,3 +5764,183 @@ class TxReportObjectBuilder extends fb.ObjectBuilder {
     return fbBuilder.buffer;
   }
 }
+class Ethtransaction {
+  Ethtransaction._(this._bc, this._bcOffset);
+  factory Ethtransaction(List<int> bytes) {
+    final rootRef = fb.BufferContext.fromBytes(bytes);
+    return reader.read(rootRef, 0);
+  }
+
+  static const fb.Reader<Ethtransaction> reader = _EthtransactionReader();
+
+  final fb.BufferContext _bc;
+  final int _bcOffset;
+
+  int get chainId => const fb.Uint64Reader().vTableGet(_bc, _bcOffset, 4, 0);
+  String? get to => const fb.StringReader().vTableGetNullable(_bc, _bcOffset, 6);
+  int get value => const fb.Uint64Reader().vTableGet(_bc, _bcOffset, 8, 0);
+  int get nonce => const fb.Uint32Reader().vTableGet(_bc, _bcOffset, 10, 0);
+  int get gas => const fb.Uint64Reader().vTableGet(_bc, _bcOffset, 12, 0);
+  int get maxFeePerGas => const fb.Uint64Reader().vTableGet(_bc, _bcOffset, 14, 0);
+  int get maxPriorityFeePerGas => const fb.Uint64Reader().vTableGet(_bc, _bcOffset, 16, 0);
+
+  @override
+  String toString() {
+    return 'Ethtransaction{chainId: ${chainId}, to: ${to}, value: ${value}, nonce: ${nonce}, gas: ${gas}, maxFeePerGas: ${maxFeePerGas}, maxPriorityFeePerGas: ${maxPriorityFeePerGas}}';
+  }
+
+  EthtransactionT unpack() => EthtransactionT(
+      chainId: chainId,
+      to: to,
+      value: value,
+      nonce: nonce,
+      gas: gas,
+      maxFeePerGas: maxFeePerGas,
+      maxPriorityFeePerGas: maxPriorityFeePerGas);
+
+  static int pack(fb.Builder fbBuilder, EthtransactionT? object) {
+    if (object == null) return 0;
+    return object.pack(fbBuilder);
+  }
+}
+
+class EthtransactionT implements fb.Packable {
+  int chainId;
+  String? to;
+  int value;
+  int nonce;
+  int gas;
+  int maxFeePerGas;
+  int maxPriorityFeePerGas;
+
+  EthtransactionT({
+      this.chainId = 0,
+      this.to,
+      this.value = 0,
+      this.nonce = 0,
+      this.gas = 0,
+      this.maxFeePerGas = 0,
+      this.maxPriorityFeePerGas = 0});
+
+  @override
+  int pack(fb.Builder fbBuilder) {
+    final int? toOffset = to == null ? null
+        : fbBuilder.writeString(to!);
+    fbBuilder.startTable(7);
+    fbBuilder.addUint64(0, chainId);
+    fbBuilder.addOffset(1, toOffset);
+    fbBuilder.addUint64(2, value);
+    fbBuilder.addUint32(3, nonce);
+    fbBuilder.addUint64(4, gas);
+    fbBuilder.addUint64(5, maxFeePerGas);
+    fbBuilder.addUint64(6, maxPriorityFeePerGas);
+    return fbBuilder.endTable();
+  }
+
+  @override
+  String toString() {
+    return 'EthtransactionT{chainId: ${chainId}, to: ${to}, value: ${value}, nonce: ${nonce}, gas: ${gas}, maxFeePerGas: ${maxFeePerGas}, maxPriorityFeePerGas: ${maxPriorityFeePerGas}}';
+  }
+}
+
+class _EthtransactionReader extends fb.TableReader<Ethtransaction> {
+  const _EthtransactionReader();
+
+  @override
+  Ethtransaction createObject(fb.BufferContext bc, int offset) => 
+    Ethtransaction._(bc, offset);
+}
+
+class EthtransactionBuilder {
+  EthtransactionBuilder(this.fbBuilder);
+
+  final fb.Builder fbBuilder;
+
+  void begin() {
+    fbBuilder.startTable(7);
+  }
+
+  int addChainId(int? chainId) {
+    fbBuilder.addUint64(0, chainId);
+    return fbBuilder.offset;
+  }
+  int addToOffset(int? offset) {
+    fbBuilder.addOffset(1, offset);
+    return fbBuilder.offset;
+  }
+  int addValue(int? value) {
+    fbBuilder.addUint64(2, value);
+    return fbBuilder.offset;
+  }
+  int addNonce(int? nonce) {
+    fbBuilder.addUint32(3, nonce);
+    return fbBuilder.offset;
+  }
+  int addGas(int? gas) {
+    fbBuilder.addUint64(4, gas);
+    return fbBuilder.offset;
+  }
+  int addMaxFeePerGas(int? maxFeePerGas) {
+    fbBuilder.addUint64(5, maxFeePerGas);
+    return fbBuilder.offset;
+  }
+  int addMaxPriorityFeePerGas(int? maxPriorityFeePerGas) {
+    fbBuilder.addUint64(6, maxPriorityFeePerGas);
+    return fbBuilder.offset;
+  }
+
+  int finish() {
+    return fbBuilder.endTable();
+  }
+}
+
+class EthtransactionObjectBuilder extends fb.ObjectBuilder {
+  final int? _chainId;
+  final String? _to;
+  final int? _value;
+  final int? _nonce;
+  final int? _gas;
+  final int? _maxFeePerGas;
+  final int? _maxPriorityFeePerGas;
+
+  EthtransactionObjectBuilder({
+    int? chainId,
+    String? to,
+    int? value,
+    int? nonce,
+    int? gas,
+    int? maxFeePerGas,
+    int? maxPriorityFeePerGas,
+  })
+      : _chainId = chainId,
+        _to = to,
+        _value = value,
+        _nonce = nonce,
+        _gas = gas,
+        _maxFeePerGas = maxFeePerGas,
+        _maxPriorityFeePerGas = maxPriorityFeePerGas;
+
+  /// Finish building, and store into the [fbBuilder].
+  @override
+  int finish(fb.Builder fbBuilder) {
+    final int? toOffset = _to == null ? null
+        : fbBuilder.writeString(_to!);
+    fbBuilder.startTable(7);
+    fbBuilder.addUint64(0, _chainId);
+    fbBuilder.addOffset(1, toOffset);
+    fbBuilder.addUint64(2, _value);
+    fbBuilder.addUint32(3, _nonce);
+    fbBuilder.addUint64(4, _gas);
+    fbBuilder.addUint64(5, _maxFeePerGas);
+    fbBuilder.addUint64(6, _maxPriorityFeePerGas);
+    return fbBuilder.endTable();
+  }
+
+  /// Convenience method to serialize to byte list.
+  @override
+  Uint8List toBytes([String? fileIdentifier]) {
+    final fbBuilder = fb.Builder(deduplicateTables: false);
+    fbBuilder.finish(finish(fbBuilder), fileIdentifier);
+    return fbBuilder.buffer;
+  }
+}

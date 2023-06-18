@@ -268,3 +268,13 @@ table TxReport {
   fee:uint64;
   privacy_level:uint8;
 }
+
+table ETHTransaction {
+  chain_id:uint64;
+  to:string;
+  value:uint64;
+  nonce:uint32;
+  gas:uint64;
+  max_fee_per_gas:uint64;
+  max_priority_fee_per_gas:uint64;
+}
