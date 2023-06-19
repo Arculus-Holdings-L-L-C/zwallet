@@ -234,7 +234,7 @@ class AddressState extends State<AddressInput> {
     if (address != null)
       setState(() {
         final paymentURI = decodeAddress(context, address);
-        _addressController.text = paymentURI.address;
+        _addressController.text = paymentURI.address!;
       });
   }
 }

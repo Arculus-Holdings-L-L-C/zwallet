@@ -33,7 +33,6 @@ class SendState extends State<SendPage> {
   final _formKey = GlobalKey<FormState>();
   final _amountKey = GlobalKey<DualMoneyInputState>();
   var _initialAmount = 0;
-  var _address = "";
   var _sBalance = 0;
   var _tBalance = 0;
   var _excludedBalance = 0;
@@ -176,7 +175,6 @@ class SendState extends State<SendPage> {
                             maxLines: 10,
                             keyboardType: TextInputType.multiline,
                           ),
-                          onSaved: _onAddress,
                           validator: _checkAddress,
                           onSuggestionSelected: (Suggestion suggestion) {
                             _addressController.text = suggestion.name;
@@ -331,7 +329,7 @@ class SendState extends State<SendPage> {
     var template = SendTemplateT(
         id: id,
         title: title,
-        address: _address,
+        address: _addressController.text,
         amount: stringToAmount(dualAmountController.coinAmountController.text),
         fiatAmount: parseNumber(dualAmountController.fiatAmountController.text),
         feeIncluded: dualAmountController.feeIncluded,
@@ -388,8 +386,16 @@ class SendState extends State<SendPage> {
     if (v == null || v.isEmpty) return s.addressIsEmpty;
     final suggestion = getSuggestion(v);
     if (suggestion != null) return null;
-    if (!WarpApi.validAddress(active.coin, v)) return s.invalidAddress;
-    return null;
+    if (WarpApi.validAddress(active.coin, v)) return null;
+    if (v.contains(":")) {
+      try {
+        WarpApi.parsePaymentURI(active.coin, v);
+        return null;
+      } on String catch (e) {
+        return e;
+      }
+    }
+    return s.invalidAddress;
   }
 
   void _onScan() async {
@@ -406,37 +412,44 @@ class SendState extends State<SendPage> {
   void _setPaymentURI(String uriOrAddress) {
     try {
       final paymentURI = decodeAddress(context, uriOrAddress);
-      setState(() {
-        _address = paymentURI.address;
-        _addressController.text = _address;
-        if (paymentURI.memo.isNotEmpty) _memoController.text = paymentURI.memo;
-        if (paymentURI.amount != 0) amountInput?.setAmount(paymentURI.amount);
-      });
+      _addressController.text = paymentURI.address!;
+      if (paymentURI.memo != null) _memoController.text = paymentURI.memo!;
+      if (paymentURI.amount != 0) amountInput!.setAmount(paymentURI.amount);
+      setState(() {});
     } on String catch (e) {
       showSnackBar(S.of(context).invalidQrCode(e));
     }
   }
 
-  void _onAddress(v) {
-    final suggestion = getSuggestion(v);
-    if (suggestion == null)
-      _address = v;
-    else {
-      _address = suggestion.address;
-    }
-  }
-
   Recipient _getRecipient() {
+    final address = _addressController.text;
     final amount = amountInput?.amount ?? 0;
     final feeIncluded = amountInput?.feeIncluded ?? false;
     final memo = _memoController.text;
     final subject = _subjectController.text;
     final recipient = RecipientObjectBuilder(
-      address: _address,
+      address: address,
       amount: amount,
       feeIncluded: feeIncluded,
       replyTo: _replyTo,
       subject: subject,
+      memo: memo,
+      maxAmountPerNote: 0,
+    );
+    return Recipient(recipient.toBytes());
+  }
+
+  Recipient _getRecipientFromURI(PaymentUriT uri) {
+    final address = uri.address!;
+    final amount = uri.amount;
+    final feeIncluded = amountInput?.feeIncluded ?? false;
+    final memo = uri.memo!;
+    final recipient = RecipientObjectBuilder(
+      address: address,
+      amount: amount,
+      feeIncluded: feeIncluded,
+      replyTo: _replyTo,
+      subject: '',
       memo: memo,
       maxAmountPerNote: 0,
     );
@@ -448,8 +461,12 @@ class SendState extends State<SendPage> {
     if (form == null) return;
 
     if (form.validate()) {
-      form.save();
-      final recipient = _getRecipient();
+      var address = _addressController.text;
+      final suggestion = getSuggestion(address);
+      if (suggestion != null) address = suggestion.address;
+      final recipient = address.contains(":")
+          ? _getRecipientFromURI(decodeAddress(context, address))
+          : _getRecipient();
 
       if (!widget.isMulti)
         // send closes the page

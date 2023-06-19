@@ -842,10 +842,12 @@ class NativeLibrary {
   late final _dart_make_payment_uri _make_payment_uri =
       _make_payment_uri_ptr.asFunction<_dart_make_payment_uri>();
 
-  CResult_____c_char parse_payment_uri(
+  CResult______u8 parse_payment_uri(
+    int coin,
     ffi.Pointer<ffi.Int8> uri,
   ) {
     return _parse_payment_uri(
+      coin,
       uri,
     );
   }
@@ -1734,6 +1736,16 @@ const int TxReport_VT_NET_ORCHARD = 14;
 
 const int TxReport_VT_PRIVACY_LEVEL = 18;
 
+const int ETHTransaction_VT_CHAIN_ID = 4;
+
+const int ETHTransaction_VT_NONCE = 10;
+
+const int ETHTransaction_VT_GAS = 12;
+
+const int ETHTransaction_VT_MAX_FEE_PER_GAS = 14;
+
+const int ETHTransaction_VT_MAX_PRIORITY_FEE_PER_GAS = 16;
+
 typedef _c_dummy_export = ffi.Void Function();
 
 typedef _dart_dummy_export = void Function();
@@ -2278,11 +2290,13 @@ typedef _dart_make_payment_uri = CResult_____c_char Function(
   ffi.Pointer<ffi.Int8> memo,
 );
 
-typedef _c_parse_payment_uri = CResult_____c_char Function(
+typedef _c_parse_payment_uri = CResult______u8 Function(
+  ffi.Uint8 coin,
   ffi.Pointer<ffi.Int8> uri,
 );
 
-typedef _dart_parse_payment_uri = CResult_____c_char Function(
+typedef _dart_parse_payment_uri = CResult______u8 Function(
+  int coin,
   ffi.Pointer<ffi.Int8> uri,
 );
 

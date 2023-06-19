@@ -26,6 +26,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_protocol/url_protocol.dart';
+import 'package:warp_api/data_fb_generated.dart';
 import 'package:warp_api/warp_api.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:quick_actions/quick_actions.dart';
@@ -791,19 +792,20 @@ String decimalFormat(double x, int decimalDigits, {String symbol = ''}) =>
 String amountToString(int amount, int decimalDigits) =>
     decimalFormat(amount / ZECUNIT, decimalDigits);
 
-DecodedPaymentURI decodeAddress(BuildContext context, String? v) {
+PaymentUriT decodeAddress(BuildContext context, String? v) {
   final s = S.of(context);
-  try {
-    if (v == null || v.isEmpty) throw s.addressIsEmpty;
-    if (WarpApi.validAddress(active.coin, v))
-      return DecodedPaymentURI(v, 0, "");
-    // not a valid address, try as a payment URI
-    final json = WarpApi.parsePaymentURI(v);
-    final payment = DecodedPaymentURI.fromJson(jsonDecode(json));
-    return payment;
-  } on String catch (e) {
-    throw e;
+  if (v == null || v.isEmpty) throw s.addressIsEmpty;
+  if (WarpApi.validAddress(active.coin, v)) return PaymentUriT(address: v);
+  // not a valid address, try as a payment URI
+  if (v.contains(":")) {
+    try {
+      final payment = WarpApi.parsePaymentURI(active.coin, v);
+      return payment.unpack();
+    } on String catch (e) {
+      throw e;
+    }
   }
+  throw s.invalidAddress;
 }
 
 Future<bool> authenticate(BuildContext context, String reason) async {

@@ -278,3 +278,9 @@ table ETHTransaction {
   max_fee_per_gas:uint64;
   max_priority_fee_per_gas:uint64;
 }
+
+table PaymentURI {
+  address:string;
+  amount:uint64;
+  memo:string;
+}

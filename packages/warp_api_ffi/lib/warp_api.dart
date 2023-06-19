@@ -392,10 +392,10 @@ class WarpApi {
     return unwrapResultString(uri);
   }
 
-  static String parsePaymentURI(String uri) {
-    final json =
-        warp_api_lib.parse_payment_uri(uri.toNativeUtf8().cast<Int8>());
-    return unwrapResultString(json);
+  static PaymentUri parsePaymentURI(int coin, String uri) {
+    final paymentURI = unwrapResultBytes(
+        warp_api_lib.parse_payment_uri(coin, uri.toNativeUtf8().cast<Int8>()));
+    return PaymentUri(paymentURI);
   }
 
   static Agekeys generateKey() {
