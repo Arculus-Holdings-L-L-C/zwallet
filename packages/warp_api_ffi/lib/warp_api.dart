@@ -647,6 +647,24 @@ class WarpApi {
   static bool ledgerHasAccount(int coin, int account) {
     return unwrapResultBool(warp_api_lib.ledger_has_account(coin, account));
   }
+
+  static Future<void> transparentSync(int coin, int account) async {
+    return await compute((_) {
+      return unwrapResultU8(warp_api_lib.transparent_sync(coin, account));
+    }, null);
+  }
+
+  static List<PlainTx> getTransparentTxs(int coin, int account) {
+    final r = unwrapResultBytes(warp_api_lib.get_t_txs(coin, account));
+    final txs = PlainTxVec(r);
+    return txs.txs!;
+  }
+
+  static List<PlainNote> getTransparentNotes(int coin, int account) {
+    final r = unwrapResultBytes(warp_api_lib.get_t_notes(coin, account));
+    final notes = PlainNoteVec(r);
+    return notes.notes!;
+  }
 }
 
 String signOnlyIsolateFn(SignOnlyParams params) {

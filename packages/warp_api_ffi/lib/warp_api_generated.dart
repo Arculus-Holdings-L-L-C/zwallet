@@ -384,6 +384,51 @@ class NativeLibrary {
   late final _dart_is_valid_key _is_valid_key =
       _is_valid_key_ptr.asFunction<_dart_is_valid_key>();
 
+  CResult_u8 transparent_sync(
+    int coin,
+    int account,
+  ) {
+    return _transparent_sync(
+      coin,
+      account,
+    );
+  }
+
+  late final _transparent_sync_ptr =
+      _lookup<ffi.NativeFunction<_c_transparent_sync>>('transparent_sync');
+  late final _dart_transparent_sync _transparent_sync =
+      _transparent_sync_ptr.asFunction<_dart_transparent_sync>();
+
+  CResult______u8 get_t_txs(
+    int coin,
+    int account,
+  ) {
+    return _get_t_txs(
+      coin,
+      account,
+    );
+  }
+
+  late final _get_t_txs_ptr =
+      _lookup<ffi.NativeFunction<_c_get_t_txs>>('get_t_txs');
+  late final _dart_get_t_txs _get_t_txs =
+      _get_t_txs_ptr.asFunction<_dart_get_t_txs>();
+
+  CResult______u8 get_t_notes(
+    int coin,
+    int account,
+  ) {
+    return _get_t_notes(
+      coin,
+      account,
+    );
+  }
+
+  late final _get_t_notes_ptr =
+      _lookup<ffi.NativeFunction<_c_get_t_notes>>('get_t_notes');
+  late final _dart_get_t_notes _get_t_notes =
+      _get_t_notes_ptr.asFunction<_dart_get_t_notes>();
+
   int valid_address(
     int coin,
     ffi.Pointer<ffi.Int8> address,
@@ -1982,6 +2027,36 @@ typedef _c_is_valid_key = ffi.Int8 Function(
 typedef _dart_is_valid_key = int Function(
   int coin,
   ffi.Pointer<ffi.Int8> key,
+);
+
+typedef _c_transparent_sync = CResult_u8 Function(
+  ffi.Uint8 coin,
+  ffi.Uint32 account,
+);
+
+typedef _dart_transparent_sync = CResult_u8 Function(
+  int coin,
+  int account,
+);
+
+typedef _c_get_t_txs = CResult______u8 Function(
+  ffi.Uint8 coin,
+  ffi.Uint32 account,
+);
+
+typedef _dart_get_t_txs = CResult______u8 Function(
+  int coin,
+  int account,
+);
+
+typedef _c_get_t_notes = CResult______u8 Function(
+  ffi.Uint8 coin,
+  ffi.Uint32 account,
+);
+
+typedef _dart_get_t_notes = CResult______u8 Function(
+  int coin,
+  int account,
 );
 
 typedef _c_valid_address = ffi.Int8 Function(

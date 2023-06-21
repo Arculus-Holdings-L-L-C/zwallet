@@ -62,6 +62,7 @@ table PlainTx {
     height:uint32;
     timestamp:uint32;
     value:int64;
+    address:string;
 }
 
 table PlainTxVec {

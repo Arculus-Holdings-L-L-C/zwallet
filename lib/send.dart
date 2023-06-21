@@ -111,7 +111,7 @@ class SendState extends State<SendPage> {
     final form = _formKey.currentState;
     if (form != null) {
       form.save();
-      final recipient = _getRecipient();
+      final recipient = _getRecipient("");
       active.setDraftRecipient(recipient);
     }
     super.deactivate();
@@ -421,8 +421,7 @@ class SendState extends State<SendPage> {
     }
   }
 
-  Recipient _getRecipient() {
-    final address = _addressController.text;
+  Recipient _getRecipient(String address) {
     final amount = amountInput?.amount ?? 0;
     final feeIncluded = amountInput?.feeIncluded ?? false;
     final memo = _memoController.text;
@@ -466,7 +465,7 @@ class SendState extends State<SendPage> {
       if (suggestion != null) address = suggestion.address;
       final recipient = address.contains(":")
           ? _getRecipientFromURI(decodeAddress(context, address))
-          : _getRecipient();
+          : _getRecipient(address);
 
       if (!widget.isMulti)
         // send closes the page

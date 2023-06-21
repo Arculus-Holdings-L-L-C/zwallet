@@ -13,12 +13,12 @@ class BTCCoin extends CoinBase {
   String dbName = "btc.db";
   String image = 'assets/bitcoin.png';
   List<LWInstance> lwd = [
-    LWInstance("Blockstream", "tcp://blackie.c3-soft.com:57005")
+    LWInstance("Blockstream", "ssl://electrum.blockstream.info:50002")
   ];
   bool supportsUA = false;
   bool supportsMultisig = false;
   bool utxo = true;
   List<double> weights = [0.0001, 0.001, 0.01];
-  List<String> blockExplorers = ["https://blockstream.info/testnet/tx"];
+  List<String> blockExplorers = ["https://blockstream.info/tx"];
   bool supportsLedger = false;
 }

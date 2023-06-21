@@ -179,7 +179,7 @@ class HistoryDataSource extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => active.txs.length;
+  int get rowCount => active.sortedTxs.length;
 
   @override
   int get selectedRowCount => 0;

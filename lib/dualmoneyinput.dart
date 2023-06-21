@@ -34,7 +34,6 @@ class DualMoneyInputState extends State<DualMoneyInputWidget> {
   var fiatAmountController = TextEditingController();
   late String _fiat;
   var _fxRate = 0.0;
-  var amount = 0;
   double sliderValue = 0;
   var _feeIncluded = false;
   bool _useMillis = settings.useMillis;
@@ -103,7 +102,6 @@ class DualMoneyInputState extends State<DualMoneyInputWidget> {
             _updateSlider();
             _onChanged();
           },
-          onSaved: _onAmount,
         )),
         if (widget.max) TextButton(child: Text(s.max), onPressed: _onMax),
       ]),
@@ -244,10 +242,6 @@ class DualMoneyInputState extends State<DualMoneyInputWidget> {
     });
   }
 
-  void _onAmount(String? vs) {
-    amount = stringToAmount(vs);
-  }
-
   Future<void> restore(
       int amount, double amountInFiat, bool feeIncluded, String? fiat) async {
     final rate =
@@ -276,8 +270,9 @@ class DualMoneyInputState extends State<DualMoneyInputWidget> {
   _onChanged() {
     final onChange = widget.onChange;
     if (onChange != null) {
-      amount = stringToAmount(coinAmountController.text);
       onChange(amount);
     }
   }
+
+  int get amount => stringToAmount(coinAmountController.text);
 }

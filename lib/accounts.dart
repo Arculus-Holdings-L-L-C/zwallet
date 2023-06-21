@@ -141,6 +141,12 @@ abstract class _ActiveAccount with Store {
   String banner = "";
 
   @observable
+  List<Tx> transparentTxs = [];
+
+  @observable
+  List<Note> transparentNotes = [];
+
+  @observable
   int addrMode = 0;
 
   @observable
@@ -253,6 +259,35 @@ abstract class _ActiveAccount with Store {
   }
 
   @action
+  Future<void> updateTransparentTxNotes(int coin, int account) async {
+    if (coin < 2) {
+      await WarpApi.transparentSync(coin, id);
+      transparentTxs = WarpApi.getTransparentTxs(coin, account)
+          .map((tx) => Tx(
+              tx.id,
+              tx.height,
+              DateTime.fromMillisecondsSinceEpoch(tx.timestamp * 1000),
+              tx.txId!.substring(0, 8),
+              tx.txId!,
+              tx.value / ZECUNIT,
+              tx.address,
+              null,
+              ""))
+          .toList();
+      transparentNotes = WarpApi.getTransparentNotes(coin, account)
+          .map((note) => Note(
+              note.id,
+              note.height,
+              DateTime.fromMillisecondsSinceEpoch(note.timestamp * 1000),
+              note.value / ZECUNIT,
+              false,
+              false,
+              false))
+          .toList();
+    }
+  }
+
+  @action
   void clear() {
     messages.clear();
     notes.clear();
@@ -266,6 +301,7 @@ abstract class _ActiveAccount with Store {
     updateBalances();
     updateTBalance();
     poolBalances.update();
+    Future(() => updateTransparentTxNotes(coin, id));
 
     final dbr = DbReader(coin, id);
     notes = dbr.getNotes();
@@ -292,7 +328,10 @@ abstract class _ActiveAccount with Store {
   List<Note> get sortedNotes {
     // ignore: unused_local_variable
     final _unused = syncStatus.syncedHeight;
-    var notes2 = [...notes];
+    // ignore: unused_local_variable
+    final _unused2 = addrMode;
+    var notes2 =
+        active.isPrivate && addrMode == 2 ? [...transparentNotes] : [...notes];
     switch (noteSortConfig.field) {
       case "time":
         return _sort(notes2, (Note note) => note.height, noteSortConfig.order);
@@ -305,8 +344,11 @@ abstract class _ActiveAccount with Store {
   @computed
   List<Tx> get sortedTxs {
     // ignore: unused_local_variable
-    final _unused = syncStatus.syncedHeight;
-    var txs2 = [...txs];
+    final _unused1 = syncStatus.syncedHeight;
+    // ignore: unused_local_variable
+    final _unused2 = addrMode;
+    var txs2 =
+        active.isPrivate && addrMode == 2 ? [...transparentTxs] : [...txs];
     switch (txSortConfig.field) {
       case "time":
         return _sort(txs2, (Tx tx) => tx.height, txSortConfig.order);

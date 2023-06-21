@@ -1156,10 +1156,11 @@ class PlainTx {
   int get height => const fb.Uint32Reader().vTableGet(_bc, _bcOffset, 8, 0);
   int get timestamp => const fb.Uint32Reader().vTableGet(_bc, _bcOffset, 10, 0);
   int get value => const fb.Int64Reader().vTableGet(_bc, _bcOffset, 12, 0);
+  String? get address => const fb.StringReader().vTableGetNullable(_bc, _bcOffset, 14);
 
   @override
   String toString() {
-    return 'PlainTx{id: ${id}, txId: ${txId}, height: ${height}, timestamp: ${timestamp}, value: ${value}}';
+    return 'PlainTx{id: ${id}, txId: ${txId}, height: ${height}, timestamp: ${timestamp}, value: ${value}, address: ${address}}';
   }
 
   PlainTxT unpack() => PlainTxT(
@@ -1167,7 +1168,8 @@ class PlainTx {
       txId: txId,
       height: height,
       timestamp: timestamp,
-      value: value);
+      value: value,
+      address: address);
 
   static int pack(fb.Builder fbBuilder, PlainTxT? object) {
     if (object == null) return 0;
@@ -1181,30 +1183,35 @@ class PlainTxT implements fb.Packable {
   int height;
   int timestamp;
   int value;
+  String? address;
 
   PlainTxT({
       this.id = 0,
       this.txId,
       this.height = 0,
       this.timestamp = 0,
-      this.value = 0});
+      this.value = 0,
+      this.address});
 
   @override
   int pack(fb.Builder fbBuilder) {
     final int? txIdOffset = txId == null ? null
         : fbBuilder.writeString(txId!);
-    fbBuilder.startTable(5);
+    final int? addressOffset = address == null ? null
+        : fbBuilder.writeString(address!);
+    fbBuilder.startTable(6);
     fbBuilder.addUint32(0, id);
     fbBuilder.addOffset(1, txIdOffset);
     fbBuilder.addUint32(2, height);
     fbBuilder.addUint32(3, timestamp);
     fbBuilder.addInt64(4, value);
+    fbBuilder.addOffset(5, addressOffset);
     return fbBuilder.endTable();
   }
 
   @override
   String toString() {
-    return 'PlainTxT{id: ${id}, txId: ${txId}, height: ${height}, timestamp: ${timestamp}, value: ${value}}';
+    return 'PlainTxT{id: ${id}, txId: ${txId}, height: ${height}, timestamp: ${timestamp}, value: ${value}, address: ${address}}';
   }
 }
 
@@ -1222,7 +1229,7 @@ class PlainTxBuilder {
   final fb.Builder fbBuilder;
 
   void begin() {
-    fbBuilder.startTable(5);
+    fbBuilder.startTable(6);
   }
 
   int addId(int? id) {
@@ -1245,6 +1252,10 @@ class PlainTxBuilder {
     fbBuilder.addInt64(4, value);
     return fbBuilder.offset;
   }
+  int addAddressOffset(int? offset) {
+    fbBuilder.addOffset(5, offset);
+    return fbBuilder.offset;
+  }
 
   int finish() {
     return fbBuilder.endTable();
@@ -1257,6 +1268,7 @@ class PlainTxObjectBuilder extends fb.ObjectBuilder {
   final int? _height;
   final int? _timestamp;
   final int? _value;
+  final String? _address;
 
   PlainTxObjectBuilder({
     int? id,
@@ -1264,24 +1276,29 @@ class PlainTxObjectBuilder extends fb.ObjectBuilder {
     int? height,
     int? timestamp,
     int? value,
+    String? address,
   })
       : _id = id,
         _txId = txId,
         _height = height,
         _timestamp = timestamp,
-        _value = value;
+        _value = value,
+        _address = address;
 
   /// Finish building, and store into the [fbBuilder].
   @override
   int finish(fb.Builder fbBuilder) {
     final int? txIdOffset = _txId == null ? null
         : fbBuilder.writeString(_txId!);
-    fbBuilder.startTable(5);
+    final int? addressOffset = _address == null ? null
+        : fbBuilder.writeString(_address!);
+    fbBuilder.startTable(6);
     fbBuilder.addUint32(0, _id);
     fbBuilder.addOffset(1, txIdOffset);
     fbBuilder.addUint32(2, _height);
     fbBuilder.addUint32(3, _timestamp);
     fbBuilder.addInt64(4, _value);
+    fbBuilder.addOffset(5, addressOffset);
     return fbBuilder.endTable();
   }
 

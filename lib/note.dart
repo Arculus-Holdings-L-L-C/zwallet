@@ -155,7 +155,7 @@ class NotesDataSource extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => active.notes.length;
+  int get rowCount => active.sortedNotes.length;
 
   @override
   int get selectedRowCount => 0;
