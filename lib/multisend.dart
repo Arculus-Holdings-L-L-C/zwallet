@@ -45,7 +45,9 @@ class MultiPayState extends State<MultiPayPage> {
   }
 
   _add() async {
-    final recipient = await Navigator.of(context).pushNamed('/send', arguments: SendPageArgs(isMulti: true, recipients: multipayData.recipients)) as Recipient?;
+    final recipient = await Navigator.of(context).pushNamed('/send',
+        arguments: SendPageArgs(
+            isMulti: true, recipients: multipayData.recipients)) as Recipient?;
     if (recipient != null) {
       multipayData.addRecipient(recipient);
     }

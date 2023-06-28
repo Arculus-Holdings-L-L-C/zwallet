@@ -469,7 +469,7 @@ class SendState extends State<SendPage> {
 
       if (!widget.isMulti)
         // send closes the page
-        await send(context, [recipient]);
+        await send(context, [recipient], tonly: active.tonly);
       else
         Navigator.of(context).pop(recipient);
     }
@@ -480,13 +480,15 @@ class SendState extends State<SendPage> {
   String amountFromZAT(int v) =>
       (Decimal.fromInt(v) / ZECUNIT_DECIMAL).toString();
 
-  get spendable => math.max(
-      _tBalance +
-          _sBalance -
-          _excludedBalance -
-          _underConfirmedBalance -
-          _usedBalance,
-      0);
+  get spendable => active.tonly
+      ? _tBalance
+      : math.max(
+          _tBalance +
+              _sBalance -
+              _excludedBalance -
+              _underConfirmedBalance -
+              _usedBalance,
+          0);
 
   get change => _unconfirmedSpentBalance + _unconfirmedBalance;
 
@@ -509,14 +511,15 @@ class BalanceTable extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final s = S.of(context);
+    final tonly = active.tonly;
     return Container(
         decoration: BoxDecoration(
             border: Border.all(color: theme.dividerColor, width: 1),
             borderRadius: BorderRadius.circular(8)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          BalanceRow(Text(s.totalBalance), totalBalance),
-          BalanceRow(Text(s.underConfirmed), -underConfirmed),
-          BalanceRow(Text(s.excludedNotes), -excludedBalance),
+          if (!tonly) BalanceRow(Text(s.totalBalance), totalBalance),
+          if (!tonly) BalanceRow(Text(s.underConfirmed), -underConfirmed),
+          if (!tonly) BalanceRow(Text(s.excludedNotes), -excludedBalance),
           BalanceRow(Text(s.spendableBalance), spendable,
               style: TextStyle(color: theme.primaryColor)),
         ]));
@@ -526,8 +529,11 @@ class BalanceTable extends StatelessWidget {
 
   get underConfirmed => -underConfirmedBalance - change;
 
-  get spendable => math.max(
-      sBalance + tBalance - excludedBalance - underConfirmedBalance - used, 0);
+  get spendable => active.tonly
+      ? tBalance
+      : math.max(
+          sBalance + tBalance - excludedBalance - underConfirmedBalance - used,
+          0);
 }
 
 class BalanceRow extends StatelessWidget {
@@ -548,7 +554,8 @@ class BalanceRow extends StatelessWidget {
   }
 }
 
-Future<void> send(BuildContext context, List<Recipient> recipients) async {
+Future<void> send(BuildContext context, List<Recipient> recipients,
+    {bool tonly = false}) async {
   final s = S.of(context);
 
   await showSnackBar(s.preparingTransaction, autoClose: true);
@@ -558,8 +565,8 @@ Future<void> send(BuildContext context, List<Recipient> recipients) async {
 
   if (recipients.length == 1) active.setDraftRecipient(recipients[0]);
   try {
-    final txPlan = await WarpApi.prepareTx(
-        active.coin, active.id, recipients, settings.anchorOffset);
+    final txPlan = await WarpApi.prepareTx(active.coin, active.id, recipients,
+        settings.anchorOffset, tonly ? 6 : 0); // SAP|ORC = 6
     Navigator.pushReplacementNamed(context, '/txplan', arguments: txPlan);
   } on String catch (message) {
     showSnackBar(message);

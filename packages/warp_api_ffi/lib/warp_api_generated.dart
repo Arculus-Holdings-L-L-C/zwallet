@@ -603,6 +603,7 @@ class NativeLibrary {
     ffi.Pointer<ffi.Uint8> recipients_bytes,
     int recipients_len,
     int anchor_offset,
+    int excluded_pools,
   ) {
     return _prepare_multi_payment(
       coin,
@@ -610,6 +611,7 @@ class NativeLibrary {
       recipients_bytes,
       recipients_len,
       anchor_offset,
+      excluded_pools,
     );
   }
 
@@ -2179,6 +2181,7 @@ typedef _c_prepare_multi_payment = CResult_____c_char Function(
   ffi.Pointer<ffi.Uint8> recipients_bytes,
   ffi.Uint64 recipients_len,
   ffi.Uint32 anchor_offset,
+  ffi.Uint8 excluded_pools,
 );
 
 typedef _dart_prepare_multi_payment = CResult_____c_char Function(
@@ -2187,6 +2190,7 @@ typedef _dart_prepare_multi_payment = CResult_____c_char Function(
   ffi.Pointer<ffi.Uint8> recipients_bytes,
   int recipients_len,
   int anchor_offset,
+  int excluded_pools,
 );
 
 typedef _c_transaction_report = CResult______u8 Function(

@@ -473,6 +473,8 @@ abstract class _ActiveAccount with Store {
     return account.address;
   }
 
+  bool get tonly => active.addrMode == 2;
+
   DbReader get dbReader => DbReader(coin, id);
   int get availabeAddrs => WarpApi.getAvailableAddrs(coin, id);
 }

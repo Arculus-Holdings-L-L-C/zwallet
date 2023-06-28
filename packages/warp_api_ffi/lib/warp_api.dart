@@ -259,14 +259,19 @@ class WarpApi {
   }
 
   static Future<String> prepareTx(int coin, int account,
-      List<Recipient> recipients, int anchorOffset) async {
+      List<Recipient> recipients, int anchorOffset, int excludedPool) async {
     final builder = Builder();
     final rs = recipients.map((r) => r.unpack()).toList();
     int root = RecipientsT(values: rs).pack(builder);
     builder.finish(root);
     return await compute((_) {
-      final res = warp_api_lib.prepare_multi_payment(coin, account,
-          toNativeBytes(builder.buffer), builder.size(), anchorOffset);
+      final res = warp_api_lib.prepare_multi_payment(
+          coin,
+          account,
+          toNativeBytes(builder.buffer),
+          builder.size(),
+          anchorOffset,
+          excludedPool);
       final json = unwrapResultString(res);
       return json;
     }, null);
