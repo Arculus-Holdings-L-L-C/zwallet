@@ -160,8 +160,13 @@ class WarpApi {
   }
 
   static int warpSync(SyncParams params) {
-    final res = warp_api_lib.warp(params.coin, params.getTx ? 1 : 0,
-        params.anchorOffset, params.maxCost, params.port!.nativePort);
+    final res = warp_api_lib.warp(
+        params.coin,
+        params.account,
+        params.getTx ? 1 : 0,
+        params.anchorOffset,
+        params.maxCost,
+        params.port!.nativePort);
     params.port!.send(null);
     return unwrapResultU8(res);
   }
@@ -513,8 +518,8 @@ class WarpApi {
     return b;
   }
 
-  static Height? getDbHeight(int coin) {
-    final r = unwrapResultBytes(warp_api_lib.get_db_height(coin));
+  static Height? getDbHeight(int coin, int account) {
+    final r = unwrapResultBytes(warp_api_lib.get_db_height(coin, account));
     if (r.isEmpty) return null;
     final h = Height(r);
     return h;
@@ -728,12 +733,14 @@ List<AddressBalance> scanTransparentAccountsParamsIsolateFn(
 
 class SyncParams {
   final int coin;
+  final int account;
   final bool getTx;
   final int anchorOffset;
   final int maxCost;
   final SendPort? port;
 
-  SyncParams(this.coin, this.getTx, this.anchorOffset, this.maxCost, this.port);
+  SyncParams(this.coin, this.account, this.getTx, this.anchorOffset,
+      this.maxCost, this.port);
 }
 
 class PaymentParams {

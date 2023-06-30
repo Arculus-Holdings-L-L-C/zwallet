@@ -352,6 +352,7 @@ class NativeLibrary {
 
   CResult_u8 warp(
     int coin,
+    int account,
     int get_tx,
     int anchor_offset,
     int max_cost,
@@ -359,6 +360,7 @@ class NativeLibrary {
   ) {
     return _warp(
       coin,
+      account,
       get_tx,
       anchor_offset,
       max_cost,
@@ -1164,9 +1166,11 @@ class NativeLibrary {
 
   CResult______u8 get_db_height(
     int coin,
+    int account,
   ) {
     return _get_db_height(
       coin,
+      account,
     );
   }
 
@@ -2007,6 +2011,7 @@ typedef _dart_cancel_warp = void Function();
 
 typedef _c_warp = CResult_u8 Function(
   ffi.Uint8 coin,
+  ffi.Uint32 account,
   ffi.Int8 get_tx,
   ffi.Uint32 anchor_offset,
   ffi.Uint32 max_cost,
@@ -2015,6 +2020,7 @@ typedef _c_warp = CResult_u8 Function(
 
 typedef _dart_warp = CResult_u8 Function(
   int coin,
+  int account,
   int get_tx,
   int anchor_offset,
   int max_cost,
@@ -2555,10 +2561,12 @@ typedef _dart_get_balances = CResult______u8 Function(
 
 typedef _c_get_db_height = CResult______u8 Function(
   ffi.Uint8 coin,
+  ffi.Uint32 account,
 );
 
 typedef _dart_get_db_height = CResult______u8 Function(
   int coin,
+  int account,
 );
 
 typedef _c_get_notes = CResult______u8 Function(

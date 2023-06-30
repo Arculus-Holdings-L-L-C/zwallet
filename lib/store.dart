@@ -728,7 +728,7 @@ abstract class _SyncStatus with Store {
   }
 
   BlockInfo? getDbSyncedHeight() {
-    final h = WarpApi.getDbHeight(active.coin);
+    final h = WarpApi.getDbHeight(active.coin, active.id);
     if (h == null) return null;
     final timestamp = DateTime.fromMillisecondsSinceEpoch(h.timestamp * 1000);
     final blockInfo = BlockInfo(h.height, timestamp);
@@ -773,6 +773,7 @@ abstract class _SyncStatus with Store {
         }
         final params = SyncParams(
             active.coin,
+            active.id,
             settings.getTx,
             settings.anchorOffset,
             settings.antispam ? 50 : 1000000,
