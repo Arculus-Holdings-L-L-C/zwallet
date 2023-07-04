@@ -6093,3 +6093,148 @@ class PaymentUriObjectBuilder extends fb.ObjectBuilder {
     return fbBuilder.buffer;
   }
 }
+class Tontransaction {
+  Tontransaction._(this._bc, this._bcOffset);
+  factory Tontransaction(List<int> bytes) {
+    final rootRef = fb.BufferContext.fromBytes(bytes);
+    return reader.read(rootRef, 0);
+  }
+
+  static const fb.Reader<Tontransaction> reader = _TontransactionReader();
+
+  final fb.BufferContext _bc;
+  final int _bcOffset;
+
+  String? get to => const fb.StringReader().vTableGetNullable(_bc, _bcOffset, 4);
+  int get value => const fb.Uint64Reader().vTableGet(_bc, _bcOffset, 6, 0);
+  int get seqno => const fb.Uint32Reader().vTableGet(_bc, _bcOffset, 8, 0);
+  String? get state => const fb.StringReader().vTableGetNullable(_bc, _bcOffset, 10);
+
+  @override
+  String toString() {
+    return 'Tontransaction{to: ${to}, value: ${value}, seqno: ${seqno}, state: ${state}}';
+  }
+
+  TontransactionT unpack() => TontransactionT(
+      to: to,
+      value: value,
+      seqno: seqno,
+      state: state);
+
+  static int pack(fb.Builder fbBuilder, TontransactionT? object) {
+    if (object == null) return 0;
+    return object.pack(fbBuilder);
+  }
+}
+
+class TontransactionT implements fb.Packable {
+  String? to;
+  int value;
+  int seqno;
+  String? state;
+
+  TontransactionT({
+      this.to,
+      this.value = 0,
+      this.seqno = 0,
+      this.state});
+
+  @override
+  int pack(fb.Builder fbBuilder) {
+    final int? toOffset = to == null ? null
+        : fbBuilder.writeString(to!);
+    final int? stateOffset = state == null ? null
+        : fbBuilder.writeString(state!);
+    fbBuilder.startTable(4);
+    fbBuilder.addOffset(0, toOffset);
+    fbBuilder.addUint64(1, value);
+    fbBuilder.addUint32(2, seqno);
+    fbBuilder.addOffset(3, stateOffset);
+    return fbBuilder.endTable();
+  }
+
+  @override
+  String toString() {
+    return 'TontransactionT{to: ${to}, value: ${value}, seqno: ${seqno}, state: ${state}}';
+  }
+}
+
+class _TontransactionReader extends fb.TableReader<Tontransaction> {
+  const _TontransactionReader();
+
+  @override
+  Tontransaction createObject(fb.BufferContext bc, int offset) => 
+    Tontransaction._(bc, offset);
+}
+
+class TontransactionBuilder {
+  TontransactionBuilder(this.fbBuilder);
+
+  final fb.Builder fbBuilder;
+
+  void begin() {
+    fbBuilder.startTable(4);
+  }
+
+  int addToOffset(int? offset) {
+    fbBuilder.addOffset(0, offset);
+    return fbBuilder.offset;
+  }
+  int addValue(int? value) {
+    fbBuilder.addUint64(1, value);
+    return fbBuilder.offset;
+  }
+  int addSeqno(int? seqno) {
+    fbBuilder.addUint32(2, seqno);
+    return fbBuilder.offset;
+  }
+  int addStateOffset(int? offset) {
+    fbBuilder.addOffset(3, offset);
+    return fbBuilder.offset;
+  }
+
+  int finish() {
+    return fbBuilder.endTable();
+  }
+}
+
+class TontransactionObjectBuilder extends fb.ObjectBuilder {
+  final String? _to;
+  final int? _value;
+  final int? _seqno;
+  final String? _state;
+
+  TontransactionObjectBuilder({
+    String? to,
+    int? value,
+    int? seqno,
+    String? state,
+  })
+      : _to = to,
+        _value = value,
+        _seqno = seqno,
+        _state = state;
+
+  /// Finish building, and store into the [fbBuilder].
+  @override
+  int finish(fb.Builder fbBuilder) {
+    final int? toOffset = _to == null ? null
+        : fbBuilder.writeString(_to!);
+    final int? stateOffset = _state == null ? null
+        : fbBuilder.writeString(_state!);
+    fbBuilder.startTable(4);
+    fbBuilder.addOffset(0, toOffset);
+    fbBuilder.addUint64(1, _value);
+    fbBuilder.addUint32(2, _seqno);
+    fbBuilder.addOffset(3, stateOffset);
+    return fbBuilder.endTable();
+  }
+
+  /// Convenience method to serialize to byte list.
+  @override
+  Uint8List toBytes([String? fileIdentifier]) {
+    final fbBuilder = fb.Builder(deduplicateTables: false);
+    fbBuilder.finish(finish(fbBuilder), fileIdentifier);
+    return fbBuilder.buffer;
+  }
+}

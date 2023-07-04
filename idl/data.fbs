@@ -285,3 +285,10 @@ table PaymentURI {
   amount:uint64;
   memo:string;
 }
+
+table TONTransaction {
+  to:string;
+  value:uint64;
+  seqno:uint32;
+  state:string;
+}

@@ -9,13 +9,13 @@ import 'main.dart';
 class DualMoneyInputWidget extends StatefulWidget {
   late final String fiat;
   final int? spendable;
-  final int? initialValue;
+  final int initialValue;
   final bool max;
   final Function(int)? onChange;
 
   DualMoneyInputWidget(
       {Key? key,
-      this.initialValue,
+      this.initialValue = 0,
       this.spendable,
       String? fiat,
       this.max = false,
@@ -50,10 +50,10 @@ class DualMoneyInputState extends State<DualMoneyInputWidget> {
     super.initState();
     _fiat = widget.fiat;
     final initialValue = widget.initialValue;
-    final amount = initialValue != null
-        ? amountToString(initialValue, MAX_PRECISION)
-        : zero;
-    if (initialValue != null) _useMillis = false;
+    print("IV $initialValue");
+    final amount =
+        initialValue != 0 ? amountToString(initialValue, MAX_PRECISION) : zero;
+    if (initialValue != 0) _useMillis = false;
     coinAmountController.text = amount;
     _updateFxRate();
     _updateSlider();
